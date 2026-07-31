@@ -13,7 +13,7 @@ def require_login():
         st.markdown(
             """
             <style>
-                [data-testid="stSidebar"] {display: none;}
+                [data-testid="stSidebar"] {display: none !important;}
             </style>
             """,
             unsafe_allow_html=True
@@ -39,9 +39,19 @@ def require_login():
         
         st.stop()  # Khóa toàn bộ các đoạn code phía dưới
 
-    # Trường hợp ĐÃ đăng nhập -> Hiện nút Đăng xuất trên Sidebar
+    # 3. TRƯỜNG HỢP ĐÃ ĐĂNG NHẬP: 
+    # Bắt buộc hiện lại Sidebar và thêm nút Đăng xuất ở ĐẦU Sidebar
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebar"] {display: block !important;}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    
     with st.sidebar:
-        st.markdown("### 👤 Tài khoản: **Admin**")
+        st.markdown("👤 **Tài khoản:** Admin")
         if st.button("🚪 Đăng xuất", use_container_width=True):
             st.session_state["password_correct"] = False
             st.rerun()
