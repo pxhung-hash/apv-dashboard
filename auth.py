@@ -38,7 +38,7 @@ def require_login():
         
         st.stop()
 
-    # 3. ĐÃ ĐĂNG NHẬP -> HIỆN SIDEBAR TỰ DỰNG
+    # 3. ĐÃ ĐĂNG NHẬP -> HIỆN SIDEBAR NGHỆ THUẬT
     st.markdown(
         """
         <style>
@@ -60,7 +60,7 @@ def require_login():
         st.markdown("---")
         st.subheader("📑 Danh sách Báo cáo")
         
-        # FIX LỖI TẠI ĐÂY: Dùng đường dẫn đầy đủ từ root
+        # SỬA LỖI TẠI ĐÂY: Trỏ chuẩn vào trang chính và trang phụ
         st.page_link("dashboard.py", label="Tổng Quan Sales", icon="🏠")
         st.page_link("pages/1_Sales_Team.py", label="Sales Team Analytics", icon="📈")
         
