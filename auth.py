@@ -9,7 +9,6 @@ def require_login():
 
     # 2. CHƯA ĐĂNG NHẬP -> Hiện Form Login & Ẩn Sidebar
     if not st.session_state["password_correct"]:
-        # CSS ẩn Sidebar hoàn toàn
         st.markdown(
             """
             <style>
@@ -39,12 +38,11 @@ def require_login():
         
         st.stop()
 
-    # 3. ĐÃ ĐĂNG NHẬP -> HIỆN SIDEBAR NGHỆ THUẬT DO CHÚNG TA TỰ DỰNG
+    # 3. ĐÃ ĐĂNG NHẬP -> HIỆN SIDEBAR TỰ DỰNG
     st.markdown(
         """
         <style>
             [data-testid="stSidebar"] {display: block !important;}
-            /* Ẩn menu mặc định của Streamlit nếu có */
             [data-testid="stSidebarNav"] {display: none !important;}
         </style>
         """,
@@ -62,8 +60,8 @@ def require_login():
         st.markdown("---")
         st.subheader("📑 Danh sách Báo cáo")
         
-        # ĐÂY CHÍNH LÀ ĐOẠN TẠO MENU CHUYỂN TRANG
-        st.page_link("dashboard.py", label="📊 Tổng Quan Sales", icon="🏠")
-        st.page_link("pages/1_📈_Sales_Team.py", label="📈 Sales Team Analytics", icon="📈")
+        # FIX LỖI TẠI ĐÂY: Dùng đường dẫn đầy đủ từ root
+        st.page_link("dashboard.py", label="Tổng Quan Sales", icon="🏠")
+        st.page_link("pages/1_Sales_Team.py", label="Sales Team Analytics", icon="📈")
         
         st.markdown("---")
