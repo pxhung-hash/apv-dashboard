@@ -4,6 +4,33 @@ import plotly.express as px
 
 # 1. CẤU HÌNH TRANG WEB
 st.set_page_config(page_title="YKK Sales Dashboard", page_icon="📊", layout="wide")
+
+# ==========================================
+# CHỨC NĂNG BẢO VỆ MẬT KHẨU NỘI BỘ
+# ==========================================
+def check_password():
+    if "password_correct" not in st.session_state:
+        st.session_state["password_correct"] = False
+
+    if not st.session_state["password_correct"]:
+        st.title("🔒 Đăng nhập Hệ thống Báo cáo YKK AP")
+        pwd = st.text_input("Vui lòng nhập mật khẩu nội bộ:", type="password")
+        if st.button("Đăng nhập"):
+            if pwd == "Ykk@2026":  # <-- BẠN THAY MẬT KHẨU MỚI TẠI ĐÂY
+                st.session_state["password_correct"] = True
+                st.rerun()
+            else:
+                st.error("❌ Mật khẩu không đúng!")
+        return False
+    return True
+
+# Kiểm tra mật khẩu, nếu chưa đúng sẽ CHẶN toàn bộ chương trình bên dưới
+if not check_password():
+    st.stop()
+
+# ==========================================
+# NỘI DUNG DASHBOARD (CHỈ HIỆN KHU ĐÃ ĐĂNG NHẬP)
+# ==========================================
 st.title("📊 YKK AP - Sales & S&OP Dashboard")
 st.markdown("---")
 
@@ -47,8 +74,14 @@ with st.spinner('Đang kéo dữ liệu từ Google Sheets...'):
 if df.empty:
     st.stop()
 
-# 3. TẠO BỘ LỌC
+# 3. TẠO BỘ LỌC BÊN SIDEBAR (Thêm nút Đăng xuất)
 st.sidebar.header("🔍 Bộ lọc dữ liệu")
+
+# Thêm nút Đăng xuất ở góc trái cho tiện sử dụng
+if st.sidebar.button("🚪 Đăng xuất"):
+    st.session_state["password_correct"] = False
+    st.rerun()
+
 valid_fabs = [f for f in df['fab_clean'].unique() if f != 'Unknown']
 selected_fabs = st.sidebar.multiselect("Chọn đối tác FAB:", options=valid_fabs, default=[])
 
