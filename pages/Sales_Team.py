@@ -1,7 +1,19 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import sys
+import os
 
+# Thêm đường dẫn để import được file auth.py từ thư mục gốc
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import auth
+
+st.set_page_config(page_title="Sales Team Analytics", page_icon="📈", layout="wide")
+
+# KHÓA BẢO VỆ & NÚT ĐĂNG XUẤT SIDEBAR
+auth.require_login()
+
+# --- CODE TRANG SALES TEAM TIẾP TỤC DƯỚI NÀY ---
 # 1. CẤU HÌNH TRANG WEB
 st.set_page_config(page_title="Sales Team Analytics", page_icon="📈", layout="wide")
 st.title("📈 Sales Team - Phân Tích Cơ Cấu & Loại Dự Án")

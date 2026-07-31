@@ -1,36 +1,14 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import auth  # Import file auth riêng vừa tạo
 
-# 1. CẤU HÌNH TRANG WEB
-st.set_page_config(page_title="YKK Sales Dashboard", page_icon="📊", layout="wide")
+st.set_page_config(page_title="YKK AP - Dashboard", page_icon="📊", layout="wide")
 
-# ==========================================
-# CHỨC NĂNG BẢO VỆ MẬT KHẨU NỘI BỘ
-# ==========================================
-def check_password():
-    if "password_correct" not in st.session_state:
-        st.session_state["password_correct"] = False
+# KHÓA BẢO VỆ: Gọi hàm kiểm tra đăng nhập & Sidebar
+auth.require_login()
 
-    if not st.session_state["password_correct"]:
-        st.title("🔒 Đăng nhập Hệ thống Báo cáo YKK AP")
-        pwd = st.text_input("Vui lòng nhập mật khẩu nội bộ:", type="password")
-        if st.button("Đăng nhập"):
-            if pwd == "Ykk@2026":  # <-- BẠN THAY MẬT KHẨU MỚI TẠI ĐÂY
-                st.session_state["password_correct"] = True
-                st.rerun()
-            else:
-                st.error("❌ Mật khẩu không đúng!")
-        return False
-    return True
-
-# Kiểm tra mật khẩu, nếu chưa đúng sẽ CHẶN toàn bộ chương trình bên dưới
-if not check_password():
-    st.stop()
-
-# ==========================================
-# NỘI DUNG DASHBOARD (CHỈ HIỆN KHU ĐÃ ĐĂNG NHẬP)
-# ==========================================
+# --- CODE NỘI DUNG CHÍNH DASHBOARD ---
 st.title("📊 YKK AP - Sales & S&OP Dashboard")
 st.markdown("---")
 
@@ -74,23 +52,14 @@ with st.spinner('Đang kéo dữ liệu từ Google Sheets...'):
 if df.empty:
     st.stop()
 
-# 3. TẠO BỘ LỌC BÊN SIDEBAR (Thêm nút Đăng xuất)
+# Bộ lọc
 st.sidebar.header("🔍 Bộ lọc dữ liệu")
-
-# Thêm nút Đăng xuất ở góc trái cho tiện sử dụng
-if st.sidebar.button("🚪 Đăng xuất"):
-    st.session_state["password_correct"] = False
-    st.rerun()
-
 valid_fabs = [f for f in df['fab_clean'].unique() if f != 'Unknown']
 selected_fabs = st.sidebar.multiselect("Chọn đối tác FAB:", options=valid_fabs, default=[])
 
-if selected_fabs:
-    filtered_df = df[df['fab_clean'].isin(selected_fabs)]
-else:
-    filtered_df = df
+filtered_df = df[df['fab_clean'].isin(selected_fabs)] if selected_fabs else df
 
-# 4. VẼ BIỂU ĐỒ 
+# Biểu đồ
 col1, col2 = st.columns(2)
 
 with col1:
